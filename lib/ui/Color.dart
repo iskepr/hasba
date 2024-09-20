@@ -9,7 +9,7 @@ ThemeData lightmode = ThemeData(
     onSecondary: Colors.black,
     error: Colors.red,
     onError: Colors.white,
-    surface: Color(0xFF00E136),
+    surface: Colors.grey,
     onSurface: Colors.white,
   ),
   textTheme: TextTheme(

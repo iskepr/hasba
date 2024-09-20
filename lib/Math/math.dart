@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hasba/Layout/Button.dart';
+import 'package:hasba/Logic/math_expressions.dart';
 
 class Math extends StatefulWidget {
   const Math({super.key});
@@ -14,142 +15,177 @@ class _MathState extends State<Math> {
   List keys = [
     {
       "num": "½",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "√",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "س²",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "لو",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "''",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "(=)",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "س",
+      "num2": "ص",
       "type": false,
     },
     {
-      "num": "جا",
+      "num": "جا(",
+      "num2": "2",
       "type": false,
     },
     {
-      "num": "جتا",
+      "num": "جتا(",
+      "num2": "2",
       "type": false,
     },
     {
-      "num": "ظا",
+      "num": "ظا(",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "(-)",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "(",
+      "num2": "2",
       "type": false,
     },
     {
       "num": ")",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "%",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "ي",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "1",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "2",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "3",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "<",
+      "num2": "",
       "type": true,
     },
     {
       "num": "⃠",
+      "num2": "",
       "type": false,
     },
     {
       "num": "4",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "5",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "6",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "+",
+      "num2": "",
       "type": true,
     },
     {
       "num": "÷",
+      "num2": "",
       "type": true,
     },
     {
       "num": "7",
+      "num2": "",
       "type": false,
     },
     {
       "num": "8",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "9",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "-",
+      "num2": "",
       "type": true,
     },
     {
       "num": "x",
+      "num2": "",
       "type": true,
     },
     {
       "num": "●",
+      "num2": "",
       "type": false,
     },
     {
       "num": "0",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "𝝅",
+      "num2": "e",
       "type": false,
     },
     {
       "num": "أ.جـ",
+      "num2": "2",
       "type": false,
     },
     {
       "num": "=",
+      "num2": "2",
       "type": true,
     },
   ];
@@ -159,7 +195,7 @@ class _MathState extends State<Math> {
       body: Column(
         children: [
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -194,13 +230,21 @@ class _MathState extends State<Math> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        ButtonMain(num: '⚙️', type: true),
-                        ButtonMain(num: '~', type: true),
+                        ButtonMain(
+                          num: '⚙️',
+                          type: true,
+                          num2: '',
+                        ),
+                        ButtonMain(
+                          num: '~',
+                          type: true,
+                          num2: '',
+                        ),
                       ]),
                 ]),
           ),
           Expanded(
-            flex: 5,
+            flex: 8,
             child: Container(
               child: GridView.builder(
                 itemCount: keys.length,
@@ -217,17 +261,18 @@ class _MathState extends State<Math> {
                           // add erse all
                           sual = '';
                           egaba = '';
+                        } else if (keys[index]["num"] == '=') {
+                          egabafun();
                         } else {
                           // add nums
                           sual += keys[index]["num"];
                         }
-                        if (keys[index]["num"] == '=') {
-                          egaba = sual;
-                        }
                       });
+                      // egabafun();
                     },
                     child: ButtonMain(
                       num: keys[index]["num"],
+                      num2: keys[index]["num2"],
                       type: keys[index]["type"],
                     ),
                   );
@@ -238,5 +283,26 @@ class _MathState extends State<Math> {
         ],
       ),
     );
+  }
+
+  void egabafun() {
+    try {
+      sual = sual.replaceAll("x", "*");
+      sual = sual.replaceAll("÷", "/");
+      sual = sual.replaceAll("جا", "sin");
+      sual = sual.replaceAll("جتا", "COS");
+      sual = sual.replaceAll("ظا", "TAN");
+      sual = sual.replaceAll("لو", "LOG");
+      sual = sual.replaceAll("لو", "LOG");
+
+      var exp = Parser().parse(sual);
+      egaba = exp.evaluate(EvaluationType.REAL, ContextModel()).toString();
+      // remove .0
+      if (egaba.endsWith(".0")) {
+        egaba = egaba.replaceAll(".0", "");
+      }
+    } catch (e) {
+      egaba = 'غلط $e';
+    }
   }
 }

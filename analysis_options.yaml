@@ -15,6 +15,7 @@ analyzer:
     library_private_types_in_public_api: ignore
     prefer_const_literals_to_create_immutables: ignore
     unused_element: ignore
+    constant_identifier_names: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:
